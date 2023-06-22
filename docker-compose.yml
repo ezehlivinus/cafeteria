@@ -1,0 +1,49 @@
+version: '3.8'
+services:
+# development environment
+  dev:
+    container_name: nest-starter_dev_api
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: development
+    command: npm run start:dev
+    ports:
+      - ${PORT}:${PORT}
+      # - 9093:9093
+    env_file:
+      - .env # ensure the required variables are initialized
+      # - .env.test # you can also read from file
+    environment:
+      - NODE_ENV=development
+    networks:
+      - nest-starter-network
+    # volumes:
+    #   - .:/app
+    #   - ./app/node_modules
+    restart: unless-stopped
+
+# production environment
+  prod:
+    container_name: nest-starter_prod_api
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: production
+    command: npm run start:prod
+    ports:
+      - ${PORT}:${PORT}
+      # - 9093:9093
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+    networks:
+      - nest-starter-network
+    # volumes:
+    #   - .:/app
+    #   - ./app/node_modules
+    restart: unless-stopped
+
+networks:
+  nest-starter-network:
