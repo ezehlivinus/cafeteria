@@ -10,6 +10,9 @@ import jwtConfig from './config/jwt.config';
 import { UsersModule } from './users/users.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { RestaurantsModule } from './restaurants/restaurants.module';
+import { paginatePlugin, searchPlugin } from './common/database/plugins';
+import { Connection } from 'mongoose';
 
 @Module({
   imports: [
@@ -21,11 +24,17 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
       inject: [ConfigService],
 
       useFactory: (config: ConfigService) => ({
-        uri: config.get<string>('database.url')
+        uri: config.get<string>('database.url'),
+        connectionFactory: (connection: Connection) => {
+          connection.plugin(paginatePlugin);
+          connection.plugin(searchPlugin);
+          return connection;
+        }
       })
     }),
     AuthModule,
-    UsersModule
+    UsersModule,
+    RestaurantsModule
   ],
   controllers: [AppController],
   providers: [

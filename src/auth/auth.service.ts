@@ -46,8 +46,7 @@ export class AuthService {
     const accessToken = this.jwtService.sign({ email });
 
     return {
-      data: user,
-      accessToken
+      data: { ...user?.toJSON(), accessToken }
     };
   }
 

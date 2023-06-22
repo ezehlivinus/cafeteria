@@ -1,7 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class ErrorResponseDTO {
-  @ApiProperty()
+  @ApiProperty({
+    example: false
+  })
   success: boolean;
 
   @ApiProperty()
@@ -9,4 +11,17 @@ export class ErrorResponseDTO {
 
   @ApiProperty({ type: String, isArray: true })
   errors: string[];
+}
+
+export class EntityResponseMetadataDto {
+  @ApiProperty()
+  id: string;
+
+  @ApiProperty({
+    type: Date
+  })
+  createdAt: Date;
+
+  @ApiProperty({ type: Date })
+  updatedAt: Date;
 }

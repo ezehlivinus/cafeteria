@@ -1,5 +1,10 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { FilterQuery } from 'mongoose';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException
+} from '@nestjs/common';
+import { FilterQuery, UpdateQuery } from 'mongoose';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { User, UserDocument } from './user.schema';
@@ -21,25 +26,33 @@ export class UsersService {
     return await this.usersRepository.findOne(filter);
   }
 
-  async findOneOrFail(filter: Partial<User>) {
+  async findOneIfNotExistsFail(filter: Partial<User>) {
+    const user = await this.findOne(filter);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user;
+  }
+
+  async findOneIfExistsFail(filter: Partial<User>) {
     const user = await this.findOne(filter);
     if (user) {
-      throw new BadRequestException('User already exists');
+      throw new ConflictException('User already exists');
     }
     return user;
   }
 
   async create(createUserDto: Partial<User>) {
-    await this.findOneOrFail({ email: createUserDto.email });
+    await this.findOneIfExistsFail({ email: createUserDto.email });
     return await this.usersRepository.create(createUserDto);
   }
 
-  async update(id: Partial<User>['_id'], update: UpdateUserDto): Promise<User> {
-    return await this.usersRepository.update(
-      {
-        _id: id
-      },
-      update
-    );
+  async update(
+    filter: FilterQuery<User>,
+    update: UpdateQuery<User>
+  ): Promise<User> {
+    return await this.usersRepository.update(filter, update, {
+      runValidators: true
+    });
   }
 }

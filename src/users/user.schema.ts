@@ -2,24 +2,18 @@ import { PaginationFunction, SearchFunction } from '@/common/interfaces';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Model, Document, Types } from 'mongoose';
 import * as bcrypt from 'bcrypt';
+import { EntityModel } from '@/common/database/entity/entity.schema';
 
 export enum Roles {
   ADMIN = 'ADMIN',
+  USER = 'USER',
   SUPER_ADMIN = 'SUPER_ADMIN',
-  TEACHER = 'TEACHER',
-  STUDENT = 'STUDENT',
-  PARENT = 'PARENT'
-}
-
-export enum UserTypes {
-  SUPER_ADMIN = 'SUPER_ADMIN',
-  ADMIN = 'ADMIN'
+  RESTAURANT_OWNER = 'RESTAURANT_OWNER',
+  RESTAURANT_EMPLOYEE = 'RESTAURANT_EMPLOYEE'
 }
 
 type UserStatics = {
   hashPassword(password: string): Promise<string>;
-  paginate: PaginationFunction<User>;
-  search: SearchFunction<User>;
 };
 
 type UserMethods = {
@@ -48,7 +42,7 @@ export class User {
   @Prop()
   password: string;
 
-  @Prop({ type: String, enum: Roles, default: Roles.STUDENT })
+  @Prop({ type: String, enum: Roles, default: Roles.USER })
   role: Roles;
 }
 
@@ -76,4 +70,4 @@ UserSchema.pre('save', async function preSave(next) {
 
 export type UserDocument = User & Document & UserMethods;
 
-export type UserModel = Model<UserDocument> & UserStatics;
+export type UserModel = EntityModel<UserDocument> & UserStatics;

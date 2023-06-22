@@ -1,22 +1,26 @@
+import { PaginationQueryDTO } from '@/common/dtos/pagination.dto';
 import {
   Document,
-  Model,
   FilterQuery,
   UpdateQuery,
-  QueryOptions
+  QueryOptions,
+  PopulateOptions
 } from 'mongoose';
+import { EntityModel } from './entity.schema';
+
+interface ISearchOptions<T> {
+  fields?: Array<keyof T>;
+}
 
 export abstract class EntityRepository<T extends Document> {
-  constructor(protected readonly entityModel: Model<T>) {}
+  constructor(protected readonly entityModel: EntityModel<T>) {}
 
   async findById(
-    filterQuery: FilterQuery<T>,
+    id: FilterQuery<T>['_id'],
     projection?: Record<string, unknown> | string,
     options?: QueryOptions
   ): Promise<T | null> {
-    return await this.entityModel
-      .findById(filterQuery, projection, options)
-      .exec();
+    return await this.entityModel.findById(id, projection, options).exec();
   }
 
   async findOne(
@@ -63,5 +67,44 @@ export abstract class EntityRepository<T extends Document> {
     const result = await this.entityModel.deleteMany(filterQuery, options);
 
     return result.deletedCount >= 1;
+  }
+
+  // find all or search and paginate
+  async findOrSearch<F extends keyof T>(
+    filter?: FilterQuery<T>,
+    query?: PaginationQueryDTO,
+    searchOptions?: ISearchOptions<T>,
+    populateOptions?: PopulateOptions
+  ) {
+    if (query?.search) {
+      const fields = searchOptions?.fields;
+
+      const entityFields = Object.keys(this.entityModel.schema.obj).map((key) =>
+        key.toString()
+      );
+
+      // fields can be pass like this ['field1', 'field2]
+      // if nothing is passed the inheriting/implementing entity model's fields will be used
+      const searchResult = await this.entityModel.search(
+        {
+          query: query.search,
+          fields: (fields as string[]) || entityFields,
+          filters: filter
+        },
+        {
+          ...query,
+          populate: populateOptions
+        }
+      );
+
+      return searchResult;
+    }
+
+    const result = await this.entityModel.paginate(filter, {
+      ...query,
+      populate: populateOptions
+    });
+
+    return result;
   }
 }
