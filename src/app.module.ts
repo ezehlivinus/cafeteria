@@ -13,6 +13,8 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { RestaurantsModule } from './restaurants/restaurants.module';
 import { paginatePlugin, searchPlugin } from './common/database/plugins';
 import { Connection } from 'mongoose';
+import { MenusModule } from './menus/menus.module';
+import { MenuCategoriesModule } from './menu-categories/menu-categories.module';
 
 @Module({
   imports: [
@@ -34,7 +36,9 @@ import { Connection } from 'mongoose';
     }),
     AuthModule,
     UsersModule,
-    RestaurantsModule
+    RestaurantsModule,
+    MenusModule,
+    MenuCategoriesModule
   ],
   controllers: [AppController],
   providers: [

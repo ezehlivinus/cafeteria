@@ -26,7 +26,7 @@ import {
   RestaurantResponseDto
 } from './dtos/restaurants-response.dto';
 import { Auth } from '@/common/decorators/http.decorator';
-import { Restaurant } from './restaurants.schema';
+import { Restaurant } from './schemas/restaurants.schema';
 import { PaginationQueryDTO } from '@/common/dtos/pagination.dto';
 import { FilterQuery } from 'mongoose';
 import { PaginationQueryParams } from '@/common/decorators/pagination.decorator';
