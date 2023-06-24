@@ -2,7 +2,7 @@ version: '3.8'
 services:
 # development environment
   dev:
-    container_name: nest-starter_dev_api
+    container_name: cafeteria_dev_api
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -17,7 +17,7 @@ services:
     environment:
       - NODE_ENV=development
     networks:
-      - nest-starter-network
+      - cafeteria-network
     # volumes:
     #   - .:/app
     #   - ./app/node_modules
@@ -25,7 +25,7 @@ services:
 
 # production environment
   prod:
-    container_name: nest-starter_prod_api
+    container_name: cafeteria_prod_api
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -39,11 +39,11 @@ services:
     environment:
       - NODE_ENV=production
     networks:
-      - nest-starter-network
+      - cafeteria-network
     # volumes:
     #   - .:/app
     #   - ./app/node_modules
     restart: unless-stopped
 
 networks:
-  nest-starter-network:
+  cafeteria-network:
