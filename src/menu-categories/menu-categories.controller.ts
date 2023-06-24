@@ -21,7 +21,10 @@ import {
   ApiOkResponse
 } from '@nestjs/swagger';
 import { CreateMenuCategoryDto } from './dtos/create-menu-categories.dto';
-import { ListMenuCategoriesResponseDto, MenuCategoriesResponseDto } from './dtos/menu-categories-response.dto';
+import {
+  ListMenuCategoriesResponseDto,
+  MenuCategoriesResponseDto
+} from './dtos/menu-categories-response.dto';
 import { IdDto } from '@/common/dtos/util.dto';
 import { Roles, User } from '@/users/user.schema';
 import { CurrentUser } from '@/common/decorators/user.decorator';
@@ -29,9 +32,13 @@ import { MenuCategory } from './menu-categories.schema';
 import { PaginationQueryParams } from '@/common/decorators/pagination.decorator';
 import { PaginationQueryDTO } from '@/common/dtos/pagination.dto';
 import { FilterQuery } from 'mongoose';
+import {
+  OptionalRestaurantIdDto,
+  RestaurantIdDto
+} from '@/restaurants/dtos/restaurants.dto';
 
 @ApiTags('restaurants')
-@Controller('restaurants/:id/menu-categories')
+@Controller('restaurants/:restaurantId/menu-categories')
 export class MenuCategoriesController {
   constructor(private readonly menuCategoriesService: MenuCategoriesService) {}
 
@@ -55,11 +62,14 @@ export class MenuCategoriesController {
   @Auth([Roles.RESTAURANT_OWNER, Roles.RESTAURANT_EMPLOYEE])
   async create(
     @Body() createMenuCategoryDto: CreateMenuCategoryDto,
-    @Param() params: IdDto,
+    @Param() params: RestaurantIdDto,
     @CurrentUser() auth: Partial<User>
   ) {
     const newMenuCategory = await this.menuCategoriesService.create({
-      menuCategoryDto: { ...createMenuCategoryDto, restaurant: params.id },
+      menuCategoryDto: {
+        ...createMenuCategoryDto,
+        restaurant: params.restaurantId
+      },
       user: auth
     });
     return {
@@ -83,9 +93,13 @@ export class MenuCategoriesController {
   @PaginationQueryParams()
   async findOrSearch(
     @Query(new ValidationPipe({ transform: true }))
-    query: PaginationQueryDTO
+    query: PaginationQueryDTO,
+    @Param() params: RestaurantIdDto
   ) {
-    const filter: FilterQuery<MenuCategory> = {};
+    const filter: FilterQuery<MenuCategory> = {
+      restaurant: params.restaurantId
+    };
+    if (!params?.restaurantId) delete filter.restaurant;
 
     const menuCategories = await this.menuCategoriesService.findOrSearch(
       filter,

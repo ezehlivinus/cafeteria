@@ -1,7 +1,7 @@
-# your-app-name
+# Cafeteria
 
 ## Description
-This starter repository simplifies the process of starting a NestJS project. It provides configurations in addition to what you get when you run on your terminal '`$ nest new your-new-app-name`' to create a new nestjs project or app.
+This is a demo application for a cafeteria. It is a simple application that allows users to order food and drinks from a cafeteria. The application is built with NestJS and uses a MongoDb database. The application is dockerized and can be run with docker-compose.
 
 ## Toolings
 - <a href="https://docs.docker.com/compose/" target="_blank">Docker</a> version 20.10.17, build 100c701

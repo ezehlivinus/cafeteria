@@ -10,9 +10,9 @@ export class PaginationQueryDTO {
   @IsNumberString()
   limit: number;
 
-  @IsOptional()
-  @IsString()
-  search: string;
+  // @IsOptional()
+  // @IsString()
+  // search: string;
 }
 
 export class PaginationMetaDataResponseDto {

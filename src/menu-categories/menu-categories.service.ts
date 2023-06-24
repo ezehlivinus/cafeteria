@@ -48,7 +48,7 @@ export class MenuCategoriesService {
   }
 
   async findOneIfNotExistsFail(filter: FilterQuery<MenuCategory>) {
-    return await this.menuCategoriesRepository.findOneIfExistsFail(filter);
+    return await this.menuCategoriesRepository.findOneIfNotExistsFail(filter);
   }
 
   async findOrSearch(

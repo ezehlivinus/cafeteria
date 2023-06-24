@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { EntityRepository } from '@/common/database/entity/entity.repository';
 
@@ -21,7 +21,17 @@ export class MenuCategoriesRepository extends EntityRepository<MenuCategoryDocum
     const menuCategory = await this.findOne(filter);
 
     if (menuCategory) {
-      throw new NotFoundException('Menu Category already exists');
+      throw new ConflictException('Menu Category already exists');
+    }
+
+    return menuCategory;
+  }
+
+  async findOneIfNotExistsFail(filter: FilterQuery<MenuCategory>) {
+    const menuCategory = await this.findOne(filter);
+
+    if (!menuCategory) {
+      throw new NotFoundException('Menu Category does not exists');
     }
 
     return menuCategory;

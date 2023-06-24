@@ -12,11 +12,11 @@ export function PaginationQueryParams(): MethodDecorator {
       name: 'limit',
       description: 'the count of data to fetch (defaults to 10)',
       required: false
-    }),
-    ApiQuery({
-      name: 'search',
-      description: 'the search query',
-      required: false
     })
+    // ApiQuery({
+    //   name: 'search',
+    //   description: 'the search query',
+    //   required: false
+    // })
   );
 }

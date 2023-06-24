@@ -37,6 +37,12 @@ export class Menu {
     required: true
   })
   restaurant: string;
+
+  @Prop({
+    required: true,
+    default: 200 // to make things for this demo all menus are 200 (whatever the unit maybe)
+  })
+  price: number;
 }
 
 export const MenuSchema = SchemaFactory.createForClass(Menu);

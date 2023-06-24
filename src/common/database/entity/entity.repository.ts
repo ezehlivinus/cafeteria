@@ -69,37 +69,59 @@ export abstract class EntityRepository<T extends Document> {
     return result.deletedCount >= 1;
   }
 
-  // find all or search and paginate
+
+  /**
+   * @deprecated use findOrSearch instead. This is failing to use the search plugin regex $options
+   * @param filter 
+   * @param query 
+   * @param searchOptions 
+   * @param populateOptions 
+   * @returns 
+   */
+  // async _findOrSearch<F extends keyof T>(
+  //   filter?: FilterQuery<T>,
+  //   query?: PaginationQueryDTO,
+  //   searchOptions?: ISearchOptions<T>,
+  //   populateOptions?: PopulateOptions
+  // ) {
+  //   if (query?.search) {
+  //     const fields = searchOptions?.fields;
+
+  //     const entityFields = Object.keys(this.entityModel.schema.obj).map((key) =>
+  //       key.toString()
+  //     );
+
+  //     // fields can be pass like this ['field1', 'field2]
+  //     // if nothing is passed the inheriting/implementing entity model's fields will be used
+  //     const searchResult = await this.entityModel.search(
+  //       {
+  //         query: query.search,
+  //         fields: (fields as string[]) || entityFields,
+  //         filters: filter
+  //       },
+  //       {
+  //         ...query,
+  //         populate: populateOptions
+  //       }
+  //     );
+
+  //     return searchResult;
+  //   }
+
+  //   const result = await this.entityModel.paginate(filter, {
+  //     ...query,
+  //     populate: populateOptions
+  //   });
+
+  //   return result;
+  // }
+
   async findOrSearch<F extends keyof T>(
     filter?: FilterQuery<T>,
     query?: PaginationQueryDTO,
     searchOptions?: ISearchOptions<T>,
     populateOptions?: PopulateOptions
   ) {
-    if (query?.search) {
-      const fields = searchOptions?.fields;
-
-      const entityFields = Object.keys(this.entityModel.schema.obj).map((key) =>
-        key.toString()
-      );
-
-      // fields can be pass like this ['field1', 'field2]
-      // if nothing is passed the inheriting/implementing entity model's fields will be used
-      const searchResult = await this.entityModel.search(
-        {
-          query: query.search,
-          fields: (fields as string[]) || entityFields,
-          filters: filter
-        },
-        {
-          ...query,
-          populate: populateOptions
-        }
-      );
-
-      return searchResult;
-    }
-
     const result = await this.entityModel.paginate(filter, {
       ...query,
       populate: populateOptions

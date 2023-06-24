@@ -65,6 +65,11 @@ export class RestaurantsService {
     return await this.restaurantsRepository.findOneMemberWithRelations(filter);
   }
 
+  /**
+   * @description if found, return member with relations(restaurant, user(member))
+   * @param filter RestaurantMember
+   * @returns RestaurantMemberWithRelations
+   */
   async findOneMemberWithRelationsIfNotExistsFail(
     filter: FilterQuery<RestaurantMember>
   ) {
