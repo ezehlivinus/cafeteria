@@ -1,7 +1,7 @@
 # Cafeteria
 
 ## Description
-This is a demo application for a cafeteria. It is a simple application that allows users to order food and drinks from a cafeteria. The application is built with NestJS and uses a MongoDb database. The application is dockerized and can be run with docker-compose.
+This is a demo application for a cafeteria. It is a simple application that allows users to order food and drinks from a cafeteria. The application is built with NestJS and uses a MongoDb database. The application is dockerized and can be run with docker-compose or without docker, details are below.
 
 ## Toolings
 - <a href="https://docs.docker.com/compose/" target="_blank">Docker</a> version 20.10.17, build 100c701
