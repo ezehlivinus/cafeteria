@@ -65,6 +65,21 @@ $ docker:prod:restart
 $ docker image rm <image-id or repository-name>
 ```
 
+## API Documentation (Swagger): localhost
+The API documentation is available at `http://localhost:9092/api/v1/docs` when the application is running on localhost. Your `port` can be different from the one above. Check your `.env` file or the server logs on the `terminal` for the `PORT` variable value.
+
+## API Documentation (Swagger): live host
+The API documentation is available at `<your-host>/api/v1/docs` when the application is running.
+
+## Test the API
+The API can be tested using the swagger documentation.
+<br>
+<br>
+Create a user account and login to get a token. The token is required to access the protected routes.
+<br>
+<br>
+Once you login, copy the accessToken and click on the `Authorize` button on the top right corner of the page. Logout if not already logout. Paste the token in the input field and click on the `Authorize` button. You can now test the API.
+
 ## Test
 
 ```bash
